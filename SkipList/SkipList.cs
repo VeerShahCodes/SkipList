@@ -40,10 +40,11 @@ namespace SkipList
             if (height - Head.Height > 1)
             {
                 height = Head.Height + 1;
-                Head = new Node<T>(val, Head);
+                Head = new Node<T>(Head.Value, Head);
             }
 
             RecAdd(Head, val, height);
+            
         }
 
         Node<T> RecAdd(Node<T> Current, T val, int height)
@@ -98,6 +99,36 @@ namespace SkipList
             else
             {
                 return RecSearch(Current.Next, val);
+            }
+        }
+
+        public bool Delete(T val)
+        {
+            return Delete(Head, val, Head);
+        }
+
+        bool Delete(Node<T> Current, T val, Node<T> Prev)
+        {
+            if (Current == null) return false;
+            if(Current.Value.Equals(val))
+            {
+                //delete
+                while(Current.Down != null)
+                {
+                    Prev.Next = Current.Next;
+                    Current = Current.Down;
+                }
+                Prev.Next = Current.Next;
+                Current = null;
+                return true;
+            }
+            if(Current.Next == null || Current.Next.Value.CompareTo(val) > 0)
+            {
+                return Delete(Current.Down, val, Current);
+            }
+            else
+            {
+                return Delete(Current.Next, val, Current);
             }
         }
 

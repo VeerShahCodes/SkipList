@@ -8,6 +8,8 @@
             skipList.Add(6);
             skipList.Add(3);
             Console.WriteLine(skipList.Search(3));
+            skipList.Delete(3);
+            Console.WriteLine(skipList.Search(3));
             
         }
        
