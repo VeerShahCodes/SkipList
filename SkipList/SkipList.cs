@@ -104,31 +104,27 @@ namespace SkipList
 
         public bool Delete(T val)
         {
-            return Delete(Head, val, Head);
+            return Delete(Head, val);
         }
 
-        bool Delete(Node<T> Current, T val, Node<T> Prev)
+        bool Delete(Node<T> Current, T val)
         {
+            //basecase
             if (Current == null) return false;
-            if(Current.Value.Equals(val))
+            
+            if(Current.Next == null || Current.Next.Value.CompareTo(val) >= 0)
             {
-                //delete
-                while(Current.Down != null)
+                if (Current!=null&&Current.Next.Value.CompareTo(val)==0)
                 {
-                    Prev.Next = Current.Next;
-                    Current = Current.Down;
+                    Current.Next = Current.Next.Next;
+                    return Delete(Current.Down, val)||true;
                 }
-                Prev.Next = Current.Next;
-                Current = null;
-                return true;
-            }
-            if(Current.Next == null || Current.Next.Value.CompareTo(val) > 0)
-            {
-                return Delete(Current.Down, val, Current);
+                return Delete(Current.Down, val);
             }
             else
             {
-                return Delete(Current.Next, val, Current);
+                
+                return Delete(Current.Next, val);
             }
         }
 
