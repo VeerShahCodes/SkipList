@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,14 +8,22 @@ using System.Threading.Tasks;
 namespace SkipList
 {
 
-    public class SkipList<T> where T : IComparable<T>
+    public class SkipList<T> : ICollection where T : IComparable<T>
     {
         Random random = new Random();
         Node<T> Head;
+        int count;
+        public int Count => count;
 
-        public SkipList(T val)
+        public bool IsSynchronized => true;
+
+        public object SyncRoot => Head;
+
+
+        public SkipList()
         {
-            Head = new Node<T>(val);
+            Head = new Node<T>(default(T));
+            count = 0;
         }
         public int ChooseRandomHeight(Random rand)
         {
@@ -43,8 +52,9 @@ namespace SkipList
                 Head = new Node<T>(Head.Value, Head);
             }
 
+
             RecAdd(Head, val, height);
-            
+            count++;
         }
 
         Node<T> RecAdd(Node<T> Current, T val, int height)
@@ -111,23 +121,65 @@ namespace SkipList
         {
             //basecase
             if (Current == null) return false;
-            
-            if(Current.Next == null || Current.Next.Value.CompareTo(val) >= 0)
+
+            if (Current.Next == null || Current.Next.Value.CompareTo(val) >= 0)
             {
-                if (Current!=null&&Current.Next.Value.CompareTo(val)==0)
+                if (Current.Next.Value.CompareTo(val) == 0)
                 {
+                    count--;
                     Current.Next = Current.Next.Next;
-                    return Delete(Current.Down, val)||true;
+                    return Delete(Current.Down, val) || true;
                 }
                 return Delete(Current.Down, val);
             }
             else
             {
-                
+
                 return Delete(Current.Next, val);
             }
         }
 
-        
+
+        //
+
+        public void CopyTo(Array array, int index)
+        {
+            List<Node<T>> list= new List<Node<T>>();
+            //Go Down
+            Node<T> Current = Head;
+            while(Current.Down != null)
+            {
+                Current = Current.Down;
+            }
+            Current = Current.Next;
+            // Go Right until index
+            for(int i = 0; i < index; i++)
+            {
+                Current = Current.Next;
+            }
+            // Go Right until null add for each value
+            for (Node<T> i=Current;i!=null;i=i.Next)
+            {
+                list.Add(Current);
+            }           
+            array = list.ToArray();
+              
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            //Go Down
+            Node<T> Current = Head;
+            while (Current.Down != null)
+            {
+                Current = Current.Down;
+            }
+            Current = Current.Next;
+            //goes right
+            for (Node<T> i = Current; i != null; i = i.Next)
+            {
+                yield return i;
+            }
+        }
     }
 }
