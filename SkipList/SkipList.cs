@@ -144,7 +144,7 @@ namespace SkipList
 
         public void CopyTo(Array array, int index)
         {
-            List<Node<T>> list= new List<Node<T>>();
+
             //Go Down
             Node<T> Current = Head;
             while(Current.Down != null)
@@ -158,11 +158,19 @@ namespace SkipList
                 Current = Current.Next;
             }
             // Go Right until null add for each value
+            int j = 0;
             for (Node<T> i=Current;i!=null;i=i.Next)
             {
-                list.Add(Current);
-            }           
-            array = list.ToArray();
+                if (j > array.Length)
+                {
+                    throw new InvalidOperationException("not enough length for array");
+                }
+                array.SetValue(i.Value, j);
+                j++;
+
+            }
+            
+            
               
         }
 
