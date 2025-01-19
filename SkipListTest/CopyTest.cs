@@ -19,12 +19,12 @@ namespace SkipListTest
             {
                 list.Add(arr[i]);
             }
-            Node<int>[] array = new Node<int>[list.Count];
+            int[] array = new int[list.Count + 1];
             list.CopyTo(array, 0);
             int j = 0;
             foreach (SkipList.Node<int> item in list)
             {
-                Assert.True(item.Value == array[j].Value);
+                Assert.True(item.Value == array[j]);
                 j++;
             }
         }
