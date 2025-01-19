@@ -10,7 +10,7 @@ namespace SkipList
 
     public class SkipList<T> : ICollection where T : IComparable<T>
     {
-        Random random = new Random();
+        Random random = new Random(100);
         Node<T> Head;
         int count;
         public int Count => count;
@@ -63,7 +63,7 @@ namespace SkipList
             if (Current == null) return null;
 
             //Down            
-            if (Current.Next == null || Current.Next.Value.CompareTo(Current.Value) > 0)
+            if (Current.Next == null || Current.Next.Value.CompareTo(val) > 0)
             {
                 //Rec Case
                 var temp = RecAdd(Current.Down, val, height);

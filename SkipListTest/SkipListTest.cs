@@ -11,7 +11,7 @@ namespace SkipListTest
     {
 
         [Theory]
-        [InlineData(1, 2, 3, 4, 6, 7, 7)]
+        [InlineData(1, 2, 3, 4, 5, 6, 7)]
         [InlineData(1, 1, 1, 1, 1, 1)]
         public void EnumerationTest(params int[] arr)
         {
